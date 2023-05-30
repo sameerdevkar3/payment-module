@@ -5,5 +5,13 @@
         "password": "123",
         "port": 5432,
         "dbName": "test"
+    },
+    "PaytmConfig": {
+        "mid":"dgfg515451514451",
+        "key":"848dvdvdv848dv",
+        "website":"http://localhost:3000",
+        "PAYTM_CHANNEL_ID":"WEB",
+        "PAYTM_INDUSTRY_TYPE":"Retail",
+        "PAYTM_CUST_ID":"dgfg515451514451"
     }
 }

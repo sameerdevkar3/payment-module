@@ -8,19 +8,54 @@ export default function Payment() {
   const [city, setCity] = useState();
   const [state, setState] = useState();
   const [zipCode, setZipCode] = useState();
+  const [amount, setAmount] = useState(888);
 
   const onSubmit = (e) => {
     e.preventDefault();
+    if (
+      cardName ||
+      cardNumber ||
+      cardExpiry ||
+      cardCVV ||
+      address ||
+      city ||
+      state ||
+      zipCode ||
+      amount
+    ) {
+      var myHeaders = new Headers();
+      myHeaders.append("Content-Type", "application/json");
 
-    console.warn(
-      `${cardName} ${cardNumber} ${cardExpiry} ${cardCVV} ${address} ${city}
-      ${state} ${zipCode}`
-    );
+      var raw = JSON.stringify({
+        cardName: cardName,
+        cardNumber: cardNumber,
+        cardExpiry: cardExpiry,
+        cardCVV: cardCVV,
+        address: address,
+        city: city,
+        state: state,
+        zipCode: zipCode,
+        amount: amount,
+      });
+
+      console.warn(raw);
+
+      var requestOptions = {
+        method: "POST",
+        headers: myHeaders,
+        body: raw,
+      };
+
+      fetch("http://localhost:3000/make-payment", requestOptions)
+        .then((response) => response.text())
+        .then((result) => console.log(result))
+        .catch((error) => console.log("error", error));
+    }
   };
 
   const expriy_format = (value) => {
     if (!value) {
-        return "";
+      return "";
     }
     const expdate = value;
     const expDateFormatter =
@@ -29,6 +64,17 @@ export default function Payment() {
       String(expdate).replace(/\//g, "").substring(2, 4);
 
     return expDateFormatter;
+  };
+  const handleChangeCVV = (value) => {
+    if (value.target.value.length === 3) {
+      setCardCVV(value.target.value);
+    }
+  };
+
+  const handleChangeCardNumber = (value) => {
+    if (value.target.value.length === 16) {
+      setCardNumber(value.target.value);
+    }
   };
 
   return (
@@ -66,9 +112,10 @@ export default function Payment() {
                       <input
                         type="number"
                         value={cardNumber}
-                        onChange={(e) => setCardNumber(e.target.value)}
+                        onChange={handleChangeCardNumber}
                         name="card_number"
                         className="form-control"
+                        maxLength={16}
                         required="required"
                       />
                       <i className="fa fa-credit-card" />{" "}
@@ -83,7 +130,7 @@ export default function Payment() {
                           onChange={(e) => setCardExpiry(e.target.value)}
                           name="card_expiry"
                           className="form-control"
-                          maxlength="5"
+                          maxLength={5}
                           value={expriy_format(cardExpiry)}
                           required="required"
                         />
@@ -93,10 +140,10 @@ export default function Payment() {
                         <input
                           type="number"
                           value={cardCVV}
-                          onChange={(e) => setCardCVV(e.target.value)}
+                          onChange={handleChangeCVV}
                           name="card_cvv"
                           className="form-control"
-                          maxlength="3"
+                          maxLength={3}
                           pattern="[0-9][0-9][0-9]"
                           required="required"
                         />
@@ -168,7 +215,7 @@ export default function Payment() {
               <div className="form-group mt-4 mb-4 d-flex justify-content-between">
                 <span>Previous step</span>
                 <button className="btn btn-primary px-3" type="submit">
-                  Pay $888
+                  Pay ${amount}
                 </button>
               </div>
             </div>

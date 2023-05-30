@@ -10,6 +10,26 @@ export default function HomeLogin() {
   const onSubmit = (e) => {
     e.preventDefault();
 
+    var myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+
+    var raw = JSON.stringify({
+      email: email,
+      fullName: fullName,
+      password: password,
+    });
+
+    var requestOptions = {
+      method: "POST",
+      headers: myHeaders,
+      body: raw,
+    };
+
+    fetch("http://localhost:3000/create-account", requestOptions)
+      .then((response) => response.text())
+      .then((result) => console.log(result))
+      .catch((error) => console.log("error", error));
+
     setEmail("");
     setFullName("");
     setPassword("");
