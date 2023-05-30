@@ -1,9 +1,26 @@
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+
 export default function HomeLogin() {
+  const [email, setEmail] = useState();
+  const [fullName, setFullName] = useState();
+  const [password, setPassword] = useState();
+  const navigate = useNavigate();
+
+  const onSubmit = (e) => {
+    e.preventDefault();
+
+    setEmail("");
+    setFullName("");
+    setPassword("");
+    navigate("/cards");
+  };
+
   return (
     <>
       <div
         className="container shadow-lg p-3 mb-5 bg-white rounded"
-        style={{ width: "50%" }}
+        style={{ width: "20%" }}
       >
         <div>
           <div className="row mb-5 mt-2">
@@ -18,12 +35,13 @@ export default function HomeLogin() {
             </p>
           </div>
         </div>
-        <form method="post">
+        <form onSubmit={onSubmit}>
           {/* Email input */}
           <div className={"form-group inputbox mt-3 mr-2"}>
             <input
               type="email"
-              ngmodel
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               name="email"
               className="form-control"
               required="required"
@@ -34,7 +52,8 @@ export default function HomeLogin() {
           <div className="form-group inputbox mt-3 mr-2">
             <input
               type="text"
-              ngmodel
+              value={fullName}
+              onChange={(e) => setFullName(e.target.value)}
               name="fullName"
               className="form-control"
               required="required"
@@ -45,7 +64,8 @@ export default function HomeLogin() {
           <div className="form-group inputbox mt-3 mr-2">
             <input
               type="password"
-              ngmodel
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
               name="password"
               className="form-control"
               required="required"
